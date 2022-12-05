@@ -1,10 +1,11 @@
-import { Room, LobbyRoom, Client } from "colyseus";
+import {Room, LobbyRoom, Client, updateLobby} from "colyseus";
 import { MyRoomState } from "./schema/MyRoomState";
 
 export class MyGameRoom extends Room<MyRoomState> {
 
   onCreate (options: any) {
     this.setState(new MyRoomState());
+    this.autoDispose = false;
 
     this.onMessage("type", (client, message) => {
 

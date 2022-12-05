@@ -6,6 +6,7 @@ import { monitor } from "@colyseus/monitor";
  */
 import {MyLobbyRoom} from "./rooms/MyLobbyRoom";
 import {MyGameRoom} from "./rooms/MyGameRoom";
+import {LobbyRoom, matchMaker, Room} from "colyseus";
 
 export default Arena({
     getId: () => "Your Colyseus App",
@@ -15,7 +16,7 @@ export default Arena({
          * Define your room handlers:
          */
         gameServer.define('my_lobby', MyLobbyRoom);
-        gameServer.define('my_game', MyGameRoom);
+        gameServer.define('my_game', MyGameRoom).enableRealtimeListing();
 
     },
 
@@ -40,5 +41,7 @@ export default Arena({
         /**
          * Before before gameServer.listen() is called.
          */
+        matchMaker.create("my_lobby");
+
     }
 });

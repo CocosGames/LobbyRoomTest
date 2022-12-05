@@ -1,27 +1,20 @@
-import { Room, LobbyRoom, Client } from "colyseus";
-import { MyRoomState } from "./schema/MyRoomState";
+import { Schema, type } from "@colyseus/schema";
+import { Client, LobbyRoom } from "colyseus";
+import {MyRoomState} from "./schema/MyRoomState";
 
-export class MyLobbyRoom<MyRoomState> extends LobbyRoom {
+export class MyLobbyRoom extends LobbyRoom {
+    async onCreate(options:any) {
+        await super.onCreate(options);
+        this.autoDispose = false;
+        this.setState(new MyRoomState());
+    }
 
-  onCreate (options: any) {
-    this.setState(new MyRoomState());
+    onJoin(client: Client, options:any) {
+        super.onJoin(client, options);
+        this.state.custom = client.sessionId;
+    }
 
-    this.onMessage("type", (client, message) => {
-
-    });
-
-  }
-
-  onJoin (client: Client, options: any) {
-    console.log(client.sessionId, "joined!");
-  }
-
-  onLeave (client: Client, consented: boolean) {
-    console.log(client.sessionId, "left!");
-  }
-
-  onDispose() {
-    console.log("room", this.roomId, "disposing...");
-  }
-
+    onLeave(client: Client) {
+        super.onLeave(client);
+    }
 }
